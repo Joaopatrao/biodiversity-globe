@@ -7,7 +7,11 @@
   <link href="https://cesium.com/downloads/cesiumjs/releases/1.114/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
   <style>
     html, body, #cesiumContainer {
-      width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
     }
     .cesium-infoBox-description {
       max-height: 300px;
@@ -18,14 +22,16 @@
 <body>
   <div id="cesiumContainer"></div>
   <script>
-    // Viewer setup
+    // Initialize the Cesium Viewer
     const viewer = new Cesium.Viewer('cesiumContainer', {
-      terrainProvider: Cesium.createWorldTerrain(),
+      terrainProvider: new Cesium.CesiumTerrainProvider({
+        url: Cesium.IonResource.fromAssetId(1) // Default terrain
+      }),
       timeline: true,
       animation: true
     });
 
-    // Sample data - replace this with dynamic loading from CSV/GeoJSON in future
+    // Sample biodiversity data
     const biodiversityData = [
       {
         species: "Jaguar",
@@ -51,28 +57,18 @@
       }
     ];
 
-    // Load each observation as a billboard with popup
+    // Add entities to the globe
     biodiversityData.forEach(obs => {
       viewer.entities.add({
         name: obs.species,
         position: Cesium.Cartesian3.fromDegrees(obs.lon, obs.lat, obs.elevation),
         point: {
-          pixelSize: 10 + obs.abundance, // Size varies with abundance
-          color: Cesium.Color.fromRandom({alpha: 1.0})
+          pixelSize: 10 + obs.abundance,
+          color: Cesium.Color.fromRandom({ alpha: 1.0 })
         },
         description: `
           <strong>Species:</strong> ${obs.species}<br>
           <strong>Status:</strong> ${obs.status}<br>
           <strong>Abundance:</strong> ${obs.abundance}<br>
           <strong>Vegetation:</strong> ${obs.vegetation}<br>
-          <strong>Habitat Zone:</strong> ${obs.habitat}<br>
-          <strong>Elevation:</strong> ${obs.elevation} m<br>
-          <strong>Date:</strong> ${obs.date}
-        `
-      });
-    });
-
-    viewer.zoomTo(viewer.entities);
-  </script>
-</body>
-</html>
+          <strong>Habitat Zone:</strong> ${obs.hab
