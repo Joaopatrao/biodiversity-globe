@@ -4,34 +4,21 @@
   <meta charset="UTF-8" />
   <title>Rainforest Biodiversity Globe</title>
   <script src="https://cesium.com/downloads/cesiumjs/releases/1.114/Build/Cesium/Cesium.js"></script>
-  <link href="https://cesium.com/downloads/cesiumjs/releases/1.114/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.114/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
   <style>
     html, body, #cesiumContainer {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
-    .cesium-infoBox-description {
-      max-height: 300px;
-      overflow-y: auto;
+      width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
     }
   </style>
 </head>
 <body>
   <div id="cesiumContainer"></div>
   <script>
-    // Initialize the Cesium Viewer
+    // Basic viewer without terrain or Ion
     const viewer = new Cesium.Viewer('cesiumContainer', {
-      terrainProvider: new Cesium.CesiumTerrainProvider({
-        url: Cesium.IonResource.fromAssetId(1) // Default terrain
-      }),
-      timeline: true,
-      animation: true
+      shouldAnimate: true
     });
 
-    // Sample biodiversity data
     const biodiversityData = [
       {
         species: "Jaguar",
@@ -57,7 +44,6 @@
       }
     ];
 
-    // Add entities to the globe
     biodiversityData.forEach(obs => {
       viewer.entities.add({
         name: obs.species,
@@ -71,4 +57,14 @@
           <strong>Status:</strong> ${obs.status}<br>
           <strong>Abundance:</strong> ${obs.abundance}<br>
           <strong>Vegetation:</strong> ${obs.vegetation}<br>
-          <strong>Habitat Zone:</strong> ${obs.hab
+          <strong>Habitat:</strong> ${obs.habitat}<br>
+          <strong>Elevation:</strong> ${obs.elevation} m<br>
+          <strong>Date:</strong> ${obs.date}
+        `
+      });
+    });
+
+    viewer.zoomTo(viewer.entities);
+  </script>
+</body>
+</html>
